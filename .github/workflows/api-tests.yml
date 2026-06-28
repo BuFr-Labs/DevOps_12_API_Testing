@@ -1,4 +1,4 @@
-name: Newman API Tests
+name: API Tests
 
 on: [push]
 
@@ -10,31 +10,12 @@ jobs:
       # stahni repozitar na runner
       - uses: actions/checkout@v3
 
-      # nastav Node.js verzi 20, aby TLS fungovalo spravne
+      # nastav Node.js - pouzivame nativni https, zadne externi zavislosti
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      # nainstaluj newman@5 a htmlextra reporter pro hezky HTML report
-      - name: Install Newman + htmlextra reporter
-        run: npm install -g newman@5 newman-reporter-htmlextra
-
-      # spust testy - insecure + NODE_TLS_REJECT_UNAUTHORIZED pokryva oba SSL stacky
-      # Node nativni i postman-request ktery Newman pouziva interně
-      - name: Run Newman tests
-        env:
-          NODE_TLS_REJECT_UNAUTHORIZED: '0'
-        run: |
-          newman run ecommerce-api-collection.postman_collection.json \
-            -e ecommerce-environment.postman_environment.json \
-            --insecure \
-            --reporters cli,htmlextra \
-            --reporter-htmlextra-export report.html
-
-      # uloz HTML report jako artefakt - ke stazeni v Actions
-      - name: Upload report
-        uses: actions/upload-artifact@v4
-        with:
-          name: api-report
-          path: report.html
+      # spust testy pres vlastni runner - obchazi TLS bug v postman-request
+      - name: Run API tests
+        run: node run-collection.js ecommerce-api-collection.postman_collection.json ecommerce-environment.postman_environment.json
