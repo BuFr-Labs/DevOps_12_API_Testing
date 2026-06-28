@@ -13,32 +13,22 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '18'
 
-      # 3. Instalace zavisloi
-      - name: Install dependencies
+      # 3. Instalace Newmana a HTML reporteru
+      - name: Install Newman and HTML reporter
         run: |
-          npm install -g newman newman-reporter-htmlextra json-server
-
-      # 4. Spusteni testu
+          npm install -g newman
+          npm install -g newman-reporter-htmlextra
+      # 4. Spusteni testu a generovani reportu
       - name: Run API Tests
         run: |
-          # Spusteni serveru na pozadi
-          json-server --watch db.json --routes routes.json --port 3000 > server.log 2>&1 &
-          sleep 5
-          
-          # Nahrazeni URL v kolekci
-          sed -i 's|https://fakestoreapi.com|http://localhost:3000|g' ecommerce-api-collection.postman_collection.json
-          
-          # Spusteni testu
           newman run ecommerce-api-collection.postman_collection.json \
           -e ecommerce-environment.postman_environment.json \
           --reporters cli,htmlextra \
           --reporter-htmlextra-export report.html
-
-      # 5. Archivace
+      # 5. Archivace HTML reportu jako artefaktu (opravena verze na v4)
       - name: Archive HTML Report
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: API-Test-Report
