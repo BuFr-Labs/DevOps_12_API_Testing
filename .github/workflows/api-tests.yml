@@ -22,20 +22,17 @@ jobs:
           npm install -g newman-reporter-htmlextra
 
       # 4. Spusteni testu a generovani reportu
+      # Pridano --delay-request 500 pro zpomaleni dotazu (bypass bot protection)
       - name: Run API Tests
         run: |
-          # Nainstaluj json-server
-          npm install -g json-server
-          # Spust jej na pozadi s tvymi daty (nebo prázdnými)
-          json-server --watch db.json --port 3000 &
-          # Spust testy proti localhostu
           newman run ecommerce-api-collection.postman_collection.json \
           -e ecommerce-environment.postman_environment.json \
-          --global-var "baseUrl=http://localhost:3000" \
+          --delay-request 500 \
           --reporters cli,htmlextra \
           --reporter-htmlextra-export report.html
 
-      # 5. Archivace HTML reportu jako artefaktu (opravena verze na v4)
+      # 5. Archivace HTML reportu jako artefaktu
+      # Pouzita verze v4 pro soulad s aktualnimi standardy GitHub Actions
       - name: Archive HTML Report
         uses: actions/upload-artifact@v4
         with:
