@@ -7,27 +7,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # checkout repozitare s kolekci a environmentem
+      # stahni repozitar na runner
       - uses: actions/checkout@v3
-      
-      - name: Test connectivity
-        run: curl -v https://dummyjson.com/products 2>&1 | head -50
 
-      # spusteni Newman testu v Docker kontejneru
-      # pouziva official postman/newman image
-      # tim se eliminuje problem s Node/OpenSSL/TLS na runneru
-      - name: Run Newman tests (Docker)
+      # nastav Node.js verzi 20, aby TLS fungovalo spravne
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # nainstaluj newman a htmlextra reporter pro hezky HTML report
+      - name: Install Newman + htmlextra reporter
+        run: npm install -g newman newman-reporter-htmlextra
+
+      # spust testy - kolekce + environment jsou v repozitari
+      - name: Run Newman tests
         run: |
-          docker run --rm \
-            --network host \
-            -v $PWD:/etc/newman \
-            postman/newman:latest \
-            run ecommerce-api-collection.postman_collection.json \
+          newman run ecommerce-api-collection.postman_collection.json \
             -e ecommerce-environment.postman_environment.json \
             --reporters cli,htmlextra \
             --reporter-htmlextra-export report.html
 
-      # upload HTML reportu jako artefakt do GitHub Actions
+      # uloz HTML report jako artefakt - ke stazeni v Actions
       - name: Upload report
         uses: actions/upload-artifact@v4
         with:
