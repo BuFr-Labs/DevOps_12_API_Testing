@@ -116,6 +116,13 @@ function createChain(val, negated) {
       assert(val > n, 'Expected ' + val + ' to be above ' + n);
       return chain;
     },
+    greaterThan(n) {
+      if (typeof val !== 'number') {
+        throw new Error('Expected number but got ' + typeof val);
+      }
+      assert(val > n, 'Expected ' + val + ' to be greater than ' + n);
+      return chain;
+    },
     below(n) {
       if (typeof val !== 'number') throw new Error('Expected ' + val + ' to be a number');
       assert(val < n, 'Expected ' + val + ' to be below ' + n);
