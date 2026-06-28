@@ -1,0 +1,7 @@
+{
+  "/products/category/:category": "/products?category=:category",
+  "/products/:id": "/products/:id",
+  "/products": "/products",
+  "/carts": "/carts",
+  "/users": "/users"
+}

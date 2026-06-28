@@ -6,48 +6,37 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      # 1. Klonovani repozitare
       - uses: actions/checkout@v3
 
-      # 2. Instalace Node.js
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      # 3. Instalace Newmana, HTML reporteru a json-serveru
       - name: Install dependencies
         run: |
-          npm install -g newman
-          npm install -g newman-reporter-htmlextra
-          npm install -g json-server
+          npm install -g newman newman-reporter-htmlextra json-server
 
-      # 4. Spusteni testu proti lokalnimu mock serveru
       - name: Run API Tests
         run: |
           # Spust mock server na pozadi
-          json-server --watch db.json --port 3000 > server.log 2>&1 &
+          json-server --watch db.json --routes routes.json --port 3000 > server.log 2>&1 &
           
-          # Cekani, dokud server nezacne odpovidat na portu 3000
-          echo "Waiting for server to start..."
+          # Cekani na server
           for i in {1..10}; do
-            if curl -s http://localhost:3000 > /dev/null; then
-              echo "Server is up!"
-              break
-            fi
+            if curl -s http://localhost:3000 > /dev/null; then break; fi
             sleep 2
           done
           
-          # Automaticka zamena URL v kolekci na localhost
+          # Zamena URL v kolekci
           sed -i 's|https://fakestoreapi.com|http://localhost:3000|g' ecommerce-api-collection.postman_collection.json
           
-          # Spusteni testu proti localhostu
+          # Spusteni testu
           newman run ecommerce-api-collection.postman_collection.json \
           -e ecommerce-environment.postman_environment.json \
           --reporters cli,htmlextra \
           --reporter-htmlextra-export report.html
 
-      # 5. Archivace HTML reportu
       - name: Archive HTML Report
         if: always()
         uses: actions/upload-artifact@v4
