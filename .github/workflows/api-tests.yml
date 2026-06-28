@@ -17,7 +17,7 @@ jobs:
         run: |
           docker run --rm \
             -v $PWD:/etc/newman \
-            postman/newman:alpine \
+            postman/newman:ubuntu \
             run ecommerce-api-collection.postman_collection.json \
             -e ecommerce-environment.postman_environment.json \
             --reporters cli,htmlextra \
