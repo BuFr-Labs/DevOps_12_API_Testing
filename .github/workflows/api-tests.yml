@@ -6,48 +6,32 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      # 1. Klonovani repozitare
       - uses: actions/checkout@v3
 
+      # 2. Instalace Node.js
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
+      # 3. Instalace Newmana, HTML reporteru a json-serveru
       - name: Install dependencies
         run: |
           npm install -g newman newman-reporter-htmlextra json-server
 
-      # Stazeni dat primo z API do db.json
-      - name: Download real data from API
-        run: |
-          # Stahneme produkty, uzivatele a kosiky a pospojujeme je do db.json
-          # Pouzivame --retry pro pripad docasne blokace
-          curl -sS https://fakestoreapi.com/products -o products.json
-          curl -sS https://fakestoreapi.com/carts -o carts.json
-          curl -sS https://fakestoreapi.com/users -o users.json
-          
-          # Sestaveni db.json pro json-server
-          echo '{"products":' > db.json
-          cat products.json >> db.json
-          echo ',"carts":' >> db.json
-          cat carts.json >> db.json
-          echo ',"users":' >> db.json
-          cat users.json >> db.json
-          echo '}' >> db.json
-
+      # 4. Spusteni testu proti lokalnimu mock serveru
+      # Server cte data primo ze souboru, ktere mas v repozitari
       - name: Run API Tests
         run: |
-          # Spust mock server s daty, ktera jsme prave stahli
+          # Spusteni json-serveru nad vsemi daty najednou
+          # Poznamka: json-server umi cist vice souboru, pokud je spojis v db.json
           json-server --watch db.json --routes routes.json --port 3000 > server.log 2>&1 &
           
-          # Cekani na server
-          echo "Waiting for server to start..."
-          for i in {1..10}; do
-            if curl -s http://localhost:3000 > /dev/null; then break; fi
-            sleep 2
-          done
+          # Cekani na inicializaci serveru
+          sleep 10
           
-          # Zamena URL v kolekci na localhost
+          # Automaticka zamena URL v kolekci na localhost
           sed -i 's|https://fakestoreapi.com|http://localhost:3000|g' ecommerce-api-collection.postman_collection.json
           
           # Spusteni testu
@@ -56,6 +40,8 @@ jobs:
           --reporters cli,htmlextra \
           --reporter-htmlextra-export report.html
 
+      # 5. Archivace HTML reportu
+      # Ulozi vysledek testu pro kontrolu
       - name: Archive HTML Report
         if: always()
         uses: actions/upload-artifact@v4

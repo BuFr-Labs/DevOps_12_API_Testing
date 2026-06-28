@@ -1,7 +1,9 @@
 {
-  "/products/category/:category": "/products?category=:category",
-  "/products/:id": "/products/:id",
   "/products": "/products",
+  "/products/:id": "/products/:id",
+  "/products/category/:category": "/products?category=:category",
   "/carts": "/carts",
-  "/users": "/users"
+  "/carts/:id": "/carts/:id",
+  "/users": "/users",
+  "/users/:id": "/users/:id"
 }
