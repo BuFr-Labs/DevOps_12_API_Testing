@@ -17,18 +17,37 @@ jobs:
         run: |
           npm install -g newman newman-reporter-htmlextra json-server
 
+      # Stazeni dat primo z API do db.json
+      - name: Download real data from API
+        run: |
+          # Stahneme produkty, uzivatele a kosiky a pospojujeme je do db.json
+          # Pouzivame --retry pro pripad docasne blokace
+          curl -sS https://fakestoreapi.com/products -o products.json
+          curl -sS https://fakestoreapi.com/carts -o carts.json
+          curl -sS https://fakestoreapi.com/users -o users.json
+          
+          # Sestaveni db.json pro json-server
+          echo '{"products":' > db.json
+          cat products.json >> db.json
+          echo ',"carts":' >> db.json
+          cat carts.json >> db.json
+          echo ',"users":' >> db.json
+          cat users.json >> db.json
+          echo '}' >> db.json
+
       - name: Run API Tests
         run: |
-          # Spust mock server na pozadi
+          # Spust mock server s daty, ktera jsme prave stahli
           json-server --watch db.json --routes routes.json --port 3000 > server.log 2>&1 &
           
           # Cekani na server
+          echo "Waiting for server to start..."
           for i in {1..10}; do
             if curl -s http://localhost:3000 > /dev/null; then break; fi
             sleep 2
           done
           
-          # Zamena URL v kolekci
+          # Zamena URL v kolekci na localhost
           sed -i 's|https://fakestoreapi.com|http://localhost:3000|g' ecommerce-api-collection.postman_collection.json
           
           # Spusteni testu
