@@ -16,6 +16,12 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Debug Node + OpenSSL verze
+        run: |
+          node --version
+          node -e "console.log(process.versions.openssl)"
+          node -e "require('https').get('https://dummyjson.com/products', r => console.log('OK', r.statusCode)).on('error', e => console.log('ERR', e.message))"
+
       # nainstaluj newman a htmlextra reporter pro hezky HTML report
       - name: Install Newman + htmlextra reporter
         run: npm install -g newman newman-reporter-htmlextra
