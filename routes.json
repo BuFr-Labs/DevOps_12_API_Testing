@@ -4,6 +4,7 @@
   "/products/category/:category": "/products?category=:category",
   "/carts": "/carts",
   "/carts/:id": "/carts/:id",
+  "/carts/user/:userId": "/carts?userId=:userId",
   "/users": "/users",
   "/users/:id": "/users/:id"
 }
