@@ -12,13 +12,14 @@ jobs:
       
       - name: Test connectivity
         run: curl -v https://dummyjson.com/products 2>&1 | head -50
-        
+
       # spusteni Newman testu v Docker kontejneru
       # pouziva official postman/newman image
       # tim se eliminuje problem s Node/OpenSSL/TLS na runneru
       - name: Run Newman tests (Docker)
         run: |
           docker run --rm \
+            --network host \
             -v $PWD:/etc/newman \
             postman/newman:latest \
             run ecommerce-api-collection.postman_collection.json \
