@@ -1,0 +1,683 @@
+{
+  "info": {
+    "_postman_id": "4af7a2e2-45dc-4477-96d6-864031c7e58e",
+    "name": "ecommerce-api-collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56228556"
+  },
+  "item": [
+    {
+      "name": "Ziskani vsech produktu",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Test 1: Status kod\r",
+              "pm.test(\"Status kód je 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(200);\r",
+              "});\r",
+              "\r",
+              "// Test 2: Rychlost odezvy\r",
+              "pm.test(\"Rychlost odezvy pod 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Test 3: Overeni, ze odpoved neni prazdna\r",
+              "pm.test(\"Tělo odpovědi není prázdné\", function () {\r",
+              "    pm.expect(pm.response.text()).to.not.be.empty;\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Ziskani jednoho produktu",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Test 1: Status kod\r",
+              "pm.test(\"Status kód je 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(200);\r",
+              "});\r",
+              "\r",
+              "// Test 2: Rychlost odezvy\r",
+              "pm.test(\"Rychlost odezvy pod 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Test 3: Overeni, ze odpoved neni prazdna\r",
+              "pm.test(\"Tělo odpovědi není prázdné\", function () {\r",
+              "    pm.expect(pm.response.text()).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Test 4: Overeni, ze produkt ma ID 1\r",
+              "pm.test(\"Produkt má ID 1\", function () {\r",
+              "    pm.expect(pm.response.json().id).to.equal(1);\r",
+              "});\r",
+              "\r",
+              "// Test 5: Overeni, ze struktura a datove typy sedi u daneho produktu\r",
+              "pm.test(\"Struktura jednoho produktu a datove typy\", function () {\r",
+              "    const produkt = pm.response.json();\r",
+              "    pm.expect(produkt).to.be.an('object');\r",
+              "    pm.expect(produkt.id).to.equal(1);\r",
+              "    pm.expect(produkt.title).to.be.a('string');\r",
+              "    pm.expect(produkt.price).to.be.a('number');\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Vytvoreni produktu",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Vygenerovani nahodneho cisla pro unikatni nazev\r",
+              "const randomId = Math.floor(Math.random() * 10000);\r",
+              "const randomTitle = \"DevOps Lab \" + randomId;\r",
+              "\r",
+              "// Vygenerovani nahodne ceny od 100 do 2000\r",
+              "const randomPrice = Math.floor(Math.random() * 1900) + 100;\r",
+              "\r",
+              "// Ulozeni techto hodnot do promennych, aby je Postman mohl pouzit v pozadavku\r",
+              "pm.variables.set(\"dynamicTitle\", randomTitle);\r",
+              "pm.variables.set(\"dynamicPrice\", randomPrice);"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// 1. Overeni status kodu (FakeStore API vraci 200 - ok nebo 201 - created)\r",
+              "pm.test(\"Status code je 200 nebo 201\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+              "});\r",
+              "\r",
+              "// 2. Overeni rychlosti odpovedi (pod 2000 ms)\r",
+              "pm.test(\"Response time je pod 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// --- DOPLNUJICI CVICENI (5 BODU) ---\r",
+              "// Nejprve si ulozim odpoved ze serveru\r",
+              "const jsonData = pm.response.json();\r",
+              "\r",
+              "// 3. Overeni JSON struktury a datovych typu\r",
+              "pm.test(\"Datove typy: ID je cislo a Title je text\", function () {\r",
+              "    pm.expect(jsonData.id).to.be.a('number');\r",
+              "    pm.expect(jsonData.title).to.be.a('string');\r",
+              "});\r",
+              "\r",
+              "// 4. Overeni Business logiky (cena nesmi byt zaporna nebo nulova)\r",
+              "pm.test(\"Business logic: Cena je vetsi nez 0\", function () {\r",
+              "    // Pro jistotu prevedeme na cislo, kdyby to API vracelo jako text\r",
+              "    const price = parseFloat(jsonData.price);\r",
+              "    pm.expect(price).to.be.above(0);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"title\": \"{{dynamicTitle}}\",\r\n    \"price\": {{dynamicPrice}},\r\n    \"description\": \"Skvela virtualni masina pro simulace v RHEL10\",\r\n    \"image\": \"https://i.pravatar.cc\",\r\n    \"category\": \"electronic\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/products",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Získání kategorií",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Test 1: Status kod\r",
+              "pm.test(\"Status kód je 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(200);\r",
+              "});\r",
+              "\r",
+              "// Test 2: Rychlost odezvy\r",
+              "pm.test(\"Rychlost odezvy pod 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Test 3: Overeni, ze odpoved neni prazdna\r",
+              "pm.test(\"Tělo odpovědi není prázdné\", function () {\r",
+              "    pm.expect(pm.response.text()).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Test 4: Overeni, ze odpovedi je pole\r",
+              "pm.test(\"Odpověď je pole\", function () {\r",
+              "    pm.expect(pm.response.json()).to.be.an('array');\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/categories",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "categories"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Produkty podle kategorie",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Test 1: Status kod\r",
+              "pm.test(\"Status kód je 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(200);\r",
+              "});\r",
+              "\r",
+              "// Test 2: Rychlost odezvy\r",
+              "pm.test(\"Rychlost odezvy pod 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Test 3: Overeni, ze odpoved neni prazdna\r",
+              "pm.test(\"Tělo odpovědi není prázdné\", function () {\r",
+              "    pm.expect(pm.response.text()).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Test 4: Overeni, ze vracene produkty spadaji pod kategorii 'jewelery'\r",
+              "pm.test(\"Kategorie odpovídá\", function () {\r",
+              "    const data = pm.response.json();\r",
+              "    pm.expect(data[0].category).to.equal(\"jewelery\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/category/jewelery",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "category",
+            "jewelery"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Aktualizace produktu",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Test 1: Status kod\r",
+              "pm.test(\"Status kód je 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(200);\r",
+              "});\r",
+              "\r",
+              "// Test 2: Rychlost odezvy\r",
+              "pm.test(\"Rychlost odezvy pod 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Test 3: Overeni, ze odpoved neni prazdna\r",
+              "pm.test(\"Tělo odpovědi není prázdné\", function () {\r",
+              "    pm.expect(pm.response.text()).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Test 4: Overeni, ze API vratilo data se zmenenym nazvem\r",
+              "pm.test(\"Nazev produktu byl zmenen\", function () {\r",
+              "    const jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.title).to.equal(\"Aktualizovany produkt\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"title\": \"Aktualizovany produkt\",\r\n    \"price\": 150.0\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/products/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Smazání produktu",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Vygeneruje nahodne ID od 1 do 20\r",
+              "const randomId = Math.floor(Math.random() * 20) + 1;\r",
+              "pm.collectionVariables.set(\"randomIdToDelete\", randomId);\r",
+              "console.log(\"Generuji nahodne ID ke smazani: \" + randomId);"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "    // Test 1: Status kod\r",
+              "    pm.test(\"Status kód je 200\", function () {\r",
+              "        pm.expect(pm.response.code).to.equal(200);\r",
+              "    });\r",
+              "\r",
+              "    // Test 2: Rychlost odezvy\r",
+              "    pm.test(\"Rychlost odezvy pod 2000 ms\", function () {\r",
+              "        pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "    });\r",
+              "\r",
+              "    // Test 3: Overeni, ze odpoved neni prazdna\r",
+              "    pm.test(\"Tělo odpovědi není prázdné\", function () {\r",
+              "        pm.expect(pm.response.text()).to.not.be.empty;\r",
+              "    });\r",
+              "\r",
+              "    // Test 4: Overeni, ze API potvrdilo smazani (vraci smazany objekt)\r",
+              "    pm.test(\"Smazany produkt existoval\", function () {\r",
+              "        const jsonData = pm.response.json();\r",
+              "        pm.expect(jsonData).to.have.property('id');\r",
+              "    });\r",
+              "    // Test 5: Overeni, co bylo smazano\r",
+              "pm.test(\"Smazani potvrzeno\", function () {\r",
+              "    const jsonData = pm.response.json();\r",
+              "    const targetId = pm.collectionVariables.get(\"randomIdToDelete\");\r",
+              "    \r",
+              "    // Vypise do konzole co bylo smazano\r",
+              "    console.log(\"Smazano ID z API: \" + jsonData.id);\r",
+              "    console.log(\"Smazany produkt: \" + jsonData.title);\r",
+              "    \r",
+              "    // Overeni shody\r",
+              "    pm.expect(Number(jsonData.id)).to.equal(Number(targetId));\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/products/{{randomIdToDelete}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "{{randomIdToDelete}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Získání košíků",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Test 1: Status kod\r",
+              "pm.test(\"Status kód je 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(200);\r",
+              "});\r",
+              "\r",
+              "// Test 2: Rychlost odezvy\r",
+              "pm.test(\"Rychlost odezvy pod 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Test 3: Overeni, ze odpoved neni prazdna\r",
+              "pm.test(\"Tělo odpovědi není prázdné\", function () {\r",
+              "    pm.expect(pm.response.text()).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Test 4: Overeni, ze odpovedi je pole\r",
+              "pm.test(\"Odpověď je pole\", function () {\r",
+              "    pm.expect(pm.response.json()).to.be.an('array');\r",
+              "});\r",
+              "\r",
+              "// Test 5: Overeni, ze odpoved obsahuje pole kosiku\r",
+              "pm.test(\"Odpoved obsahuje seznam kosiku\", function () {\r",
+              "    const jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.be.an('array');\r",
+              "    pm.expect(jsonData.length).to.be.above(0);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/carts",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "carts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Vytvoření košíku",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Vygeneruje nahodne ID uzivatele (1-10)\r",
+              "const randomUserId = Math.floor(Math.random() * 10) + 1;\r",
+              "// Nastavi dnesni datum\r",
+              "const today = new Date().toISOString().split('T')[0];\r",
+              "\r",
+              "pm.variables.set(\"dynamicUserId\", randomUserId);\r",
+              "pm.variables.set(\"dynamicDate\", today);"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Test 1: Status kód (FakeStore API vraci 200 - ok nebo 201 - created)\r",
+              "pm.test(\"Status code je 200 nebo 201\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+              "});\r",
+              "\r",
+              "// Test 2: Rychlost odezvy\r",
+              "pm.test(\"Rychlost odezvy pod 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Test 3: Overeni, ze odpoved neni prazdna\r",
+              "pm.test(\"Tělo odpovědi není prázdné\", function () {\r",
+              "    pm.expect(pm.response.text()).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Test 4: Overeni, ze API vratilo ID nove vytvoreneho kosiku\r",
+              "pm.test(\"Kosik vytvoren pro uzivatele \" + pm.variables.get(\"dynamicUserId\"), function () {\r",
+              "    const jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.have.property('id');\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userId\": {{dynamicUserId}},\r\n    \"date\": \"{{dynamicDate}}\",\r\n    \"products\": [{\"productId\": 5, \"quantity\": 1}]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/carts",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "carts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Získání uživatelů",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Test 1: Status kod\r",
+              "pm.test(\"Status kód je 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(200);\r",
+              "});\r",
+              "\r",
+              "// Test 2: Rychlost odezvy\r",
+              "pm.test(\"Rychlost odezvy pod 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Test 3: Overeni, ze odpoved neni prazdna\r",
+              "pm.test(\"Tělo odpovědi není prázdné\", function () {\r",
+              "    pm.expect(pm.response.text()).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Test 4: Overeni, ze odpovedi je pole\r",
+              "pm.test(\"Odpověď je pole\", function () {\r",
+              "    pm.expect(pm.response.json()).to.be.an('array');\r",
+              "});\r",
+              "\r",
+              "// Test 5: Overeni, ze seznam uzivatelu neni prazdny\r",
+              "pm.test(\"Seznam uzivatelu neni prazdny\", function () {\r",
+              "    const jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.be.an('array');\r",
+              "    pm.expect(jsonData[0]).to.have.property('username');\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Vytvoření uživatele",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const randomSuffix = Math.floor(Math.random() * 1000);\r",
+              "const username = \"user_\" + randomSuffix;\r",
+              "const email = username + \"@test.cz\";\r",
+              "\r",
+              "pm.variables.set(\"dynamicUsername\", username);\r",
+              "pm.variables.set(\"dynamicEmail\", email);"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Test 1: Status kód (FakeStore API vraci 200 - ok nebo 201 - created)\r",
+              "pm.test(\"Status code je 200 nebo 201\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+              "});\r",
+              "\r",
+              "// Test 2: Rychlost odezvy\r",
+              "pm.test(\"Rychlost odezvy pod 2000 ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "// Test 3: Overeni, ze odpoved neni prazdna\r",
+              "pm.test(\"Tělo odpovědi není prázdné\", function () {\r",
+              "    pm.expect(pm.response.text()).to.not.be.empty;\r",
+              "});\r",
+              "\r",
+              "// Test 4: Overeni, ze API potvrdilo vytvoreni uzivatele\r",
+              "pm.test(\"Uzivatel \" + pm.variables.get(\"dynamicUsername\") + \" vytvoren\", function () {\r",
+              "    const jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.have.property('id');\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"{{dynamicEmail}}\",\r\n    \"username\": \"{{dynamicUsername}}\",\r\n    \"password\": \"password123\",\r\n    \"name\": {\"firstname\": \"Jan\", \"lastname\": \"Novak\"}\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
