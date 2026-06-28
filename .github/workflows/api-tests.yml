@@ -22,9 +22,12 @@ jobs:
           node -e "console.log(process.versions.openssl)"
           node -e "require('https').get('https://dummyjson.com/products', r => console.log('OK', r.statusCode)).on('error', e => console.log('ERR', e.message))"
 
-      # nainstaluj newman a htmlextra reporter pro hezky HTML report
+      # nainstaluj newman@6 a htmlextra reporter pro hezky HTML report
       - name: Install Newman + htmlextra reporter
-        run: npm install -g newman newman-reporter-htmlextra
+        run: npm install -g newman@6 newman-reporter-htmlextra
+
+      - name: Debug Newman verze
+        run: newman --version
 
       # spust testy - kolekce + environment jsou v repozitari
       - name: Run Newman tests
