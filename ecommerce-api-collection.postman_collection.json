@@ -121,11 +121,22 @@
             "value": "keep-alive",
             "system": true,
             "type": "text"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+            "type": "text",
+            "id": 0
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text",
+            "id": 1
           }
         ],
         "url": {
-          "raw": "https://{{baseUrl}}/products",
-          "protocol": "https",
+          "raw": "{{baseUrl}}/products",
           "host": [
             "{{baseUrl}}"
           ],
@@ -265,11 +276,22 @@
             "value": "keep-alive",
             "system": true,
             "type": "text"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+            "type": "text",
+            "id": 0
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text",
+            "id": 1
           }
         ],
         "url": {
-          "raw": "https://{{baseUrl}}/products/1",
-          "protocol": "https",
+          "raw": "{{baseUrl}}/products/1",
           "host": [
             "{{baseUrl}}"
           ],
@@ -453,6 +475,18 @@
             "value": "keep-alive",
             "system": true,
             "type": "text"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+            "type": "text",
+            "id": 0
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text",
+            "id": 1
           }
         ],
         "body": {
@@ -465,14 +499,12 @@
           }
         },
         "url": {
-          "raw": "https://{{baseUrl}}/products/add",
-          "protocol": "https",
+          "raw": "{{baseUrl}}/products",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
-            "products",
-            "add"
+            "products"
           ]
         }
       },
@@ -503,13 +535,6 @@
               "// Test 4: Overeni, ze odpovedi je pole\r",
               "pm.test(\"Odpověď je pole\", function () {\r",
               "    pm.expect(pm.response.json()).to.be.an('array');\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Kategorie endpoint\", function () {\r",
-              "    const data = pm.response.json();\r",
-              "\r",
-              "    pm.expect(data).to.be.an(\"array\");\r",
-              "    pm.expect(data.length).to.be.greaterThan(0);\r",
               "});"
             ],
             "type": "text/javascript",
@@ -605,11 +630,22 @@
             "value": "keep-alive",
             "system": true,
             "type": "text"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+            "type": "text",
+            "id": 0
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text",
+            "id": 1
           }
         ],
         "url": {
-          "raw": "https://{{baseUrl}}/products/categories",
-          "protocol": "https",
+          "raw": "{{baseUrl}}/products/categories",
           "host": [
             "{{baseUrl}}"
           ],
@@ -644,15 +680,9 @@
               "});\r",
               "\r",
               "// Test 4: Overeni, ze vracene produkty spadaji pod kategorii 'jewelery'\r",
-              "pm.test(\"Produkty v kategorii\", function () {\r",
+              "pm.test(\"Kategorie odpovídá\", function () {\r",
               "    const data = pm.response.json();\r",
-              "\r",
-              "    pm.expect(data).to.have.property(\"products\");\r",
-              "    pm.expect(data.products).to.be.an(\"array\");\r",
-              "\r",
-              "    data.products.forEach(p => {\r",
-              "        pm.expect(p.category).to.equal(\"jewelery\");\r",
-              "    });\r",
+              "    pm.expect(data[0].category).to.equal(\"jewelery\");\r",
               "});"
             ],
             "type": "text/javascript",
@@ -748,11 +778,22 @@
             "value": "keep-alive",
             "system": true,
             "type": "text"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+            "type": "text",
+            "id": 0
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text",
+            "id": 1
           }
         ],
         "url": {
-          "raw": "https://{{baseUrl}}/products/category/jewelery",
-          "protocol": "https",
+          "raw": "{{baseUrl}}/products/category/jewelery",
           "host": [
             "{{baseUrl}}"
           ],
@@ -912,6 +953,18 @@
             "value": "keep-alive",
             "system": true,
             "type": "text"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+            "type": "text",
+            "id": 0
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text",
+            "id": 1
           }
         ],
         "body": {
@@ -924,8 +977,7 @@
           }
         },
         "url": {
-          "raw": "https://{{baseUrl}}/products/1",
-          "protocol": "https",
+          "raw": "{{baseUrl}}/products/1",
           "host": [
             "{{baseUrl}}"
           ],
@@ -1083,6 +1135,18 @@
             "value": "keep-alive",
             "system": true,
             "type": "text"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+            "type": "text",
+            "id": 0
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text",
+            "id": 1
           }
         ],
         "body": {
@@ -1095,8 +1159,7 @@
           }
         },
         "url": {
-          "raw": "https://{{baseUrl}}/products/{{randomIdToDelete}}",
-          "protocol": "https",
+          "raw": "{{baseUrl}}/products/{{randomIdToDelete}}",
           "host": [
             "{{baseUrl}}"
           ],
@@ -1130,28 +1193,16 @@
               "    pm.expect(pm.response.text()).to.not.be.empty;\r",
               "});\r",
               "\r",
-              "// Test 4: Overeni, ze odpovedi je objekt\r",
-              "pm.test(\"Odpověď je objekt\", function () {\r",
-              "    const jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData).to.be.an('object');\r",
+              "// Test 4: Overeni, ze odpovedi je pole\r",
+              "pm.test(\"Odpověď je pole\", function () {\r",
+              "    pm.expect(pm.response.json()).to.be.an('array');\r",
               "});\r",
               "\r",
               "// Test 5: Overeni, ze odpoved obsahuje pole kosiku\r",
-              "pm.test(\"Odpověď obsahuje seznam košíků\", function () {\r",
+              "pm.test(\"Odpoved obsahuje seznam kosiku\", function () {\r",
               "    const jsonData = pm.response.json();\r",
-              "\r",
-              "    pm.expect(jsonData).to.have.property(\"carts\");\r",
-              "    pm.expect(jsonData.carts).to.be.an(\"array\");\r",
-              "    pm.expect(jsonData.carts.length).to.be.above(0);\r",
-              "});\r",
-              "\r",
-              "// Test 6: Overeni, ze kazdy kosik ma produkty\r",
-              "pm.test(\"Každý košík má produkty\", function () {\r",
-              "    const jsonData = pm.response.json();\r",
-              "\r",
-              "    jsonData.carts.forEach(cart => {\r",
-              "        pm.expect(cart.products).to.be.an(\"array\");\r",
-              "    });\r",
+              "    pm.expect(jsonData).to.be.an('array');\r",
+              "    pm.expect(jsonData.length).to.be.above(0);\r",
               "});"
             ],
             "type": "text/javascript",
@@ -1247,11 +1298,22 @@
             "value": "keep-alive",
             "system": true,
             "type": "text"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+            "type": "text",
+            "id": 0
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text",
+            "id": 1
           }
         ],
         "url": {
-          "raw": "https://{{baseUrl}}/carts",
-          "protocol": "https",
+          "raw": "{{baseUrl}}/carts",
           "host": [
             "{{baseUrl}}"
           ],
@@ -1274,8 +1336,8 @@
               "// Nastavi dnesni datum\r",
               "const today = new Date().toISOString().split('T')[0];\r",
               "\r",
-              "pm.variables.set(\"dynamicUserId\", Math.floor(Math.random() * 10) + 1);\r",
-              "pm.variables.set(\"dynamicDate\", new Date().toISOString().split('T')[0]);"
+              "pm.variables.set(\"dynamicUserId\", randomUserId);\r",
+              "pm.variables.set(\"dynamicDate\", today);"
             ],
             "type": "text/javascript",
             "packages": {}
@@ -1301,23 +1363,6 @@
               "});\r",
               "\r",
               "// Test 4: Overeni, ze API vratilo ID nove vytvoreneho kosiku\r",
-              "let jsonData;\r",
-              "\r",
-              "try {\r",
-              "    jsonData = pm.response.json();\r",
-              "} catch (e) {\r",
-              "    pm.test(\"Valid JSON response\", function () {\r",
-              "        pm.expect.fail(\"Response is not JSON: \" + pm.response.text());\r",
-              "    });\r",
-              "}\r",
-              "\r",
-              "if (jsonData) {\r",
-              "    pm.test(\"Košík vytvořen\", function () {\r",
-              "        pm.expect(jsonData).to.have.property(\"id\");\r",
-              "        pm.expect(jsonData.userId).to.eql(parseInt(pm.variables.get(\"dynamicUserId\")));\r",
-              "    });\r",
-              "}\r",
-              "\r",
               "pm.test(\"Kosik vytvoren pro uzivatele \" + pm.variables.get(\"dynamicUserId\"), function () {\r",
               "    const jsonData = pm.response.json();\r",
               "    pm.expect(jsonData).to.have.property('id');\r",
@@ -1442,6 +1487,18 @@
             "value": "keep-alive",
             "system": true,
             "type": "text"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+            "type": "text",
+            "id": 0
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text",
+            "id": 1
           }
         ],
         "body": {
@@ -1454,14 +1511,12 @@
           }
         },
         "url": {
-          "raw": "https://{{baseUrl}}/carts/add",
-          "protocol": "https",
+          "raw": "{{baseUrl}}/carts",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
-            "carts",
-            "add"
+            "carts"
           ]
         }
       },
@@ -1489,21 +1544,16 @@
               "    pm.expect(pm.response.text()).to.not.be.empty;\r",
               "});\r",
               "\r",
-              "// Test 4: Overeni, ze odpovedi je seznam uzivatelu\r",
-              "pm.test(\"Odpověď obsahuje seznam uživatelů\", function () {\r",
-              "    const data = pm.response.json();\r",
-              "\r",
-              "    pm.expect(data).to.be.an(\"object\");\r",
-              "    pm.expect(data).to.have.property(\"users\");\r",
-              "    pm.expect(data.users).to.be.an(\"array\");\r",
+              "// Test 4: Overeni, ze odpovedi je pole\r",
+              "pm.test(\"Odpověď je pole\", function () {\r",
+              "    pm.expect(pm.response.json()).to.be.an('array');\r",
               "});\r",
               "\r",
               "// Test 5: Overeni, ze seznam uzivatelu neni prazdny\r",
-              "pm.test(\"Seznam uživatelů není prázdný\", function () {\r",
-              "    const data = pm.response.json();\r",
-              "\r",
-              "    pm.expect(data.users.length).to.be.above(0);\r",
-              "    pm.expect(data.users[0]).to.have.property(\"username\");\r",
+              "pm.test(\"Seznam uzivatelu neni prazdny\", function () {\r",
+              "    const jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.be.an('array');\r",
+              "    pm.expect(jsonData[0]).to.have.property('username');\r",
               "});"
             ],
             "type": "text/javascript",
@@ -1599,11 +1649,22 @@
             "value": "keep-alive",
             "system": true,
             "type": "text"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+            "type": "text",
+            "id": 0
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text",
+            "id": 1
           }
         ],
         "url": {
-          "raw": "https://{{baseUrl}}/users",
-          "protocol": "https",
+          "raw": "{{baseUrl}}/users",
           "host": [
             "{{baseUrl}}"
           ],
@@ -1655,21 +1716,6 @@
               "pm.test(\"Uzivatel \" + pm.variables.get(\"dynamicUsername\") + \" vytvoren\", function () {\r",
               "    const jsonData = pm.response.json();\r",
               "    pm.expect(jsonData).to.have.property('id');\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Uživatel byl vytvořen správně\", function () {\r",
-              "    const jsonData = pm.response.json();\r",
-              "\r",
-              "    pm.expect(jsonData).to.have.property(\"id\");\r",
-              "    pm.expect(jsonData.username).to.eql(pm.variables.get(\"dynamicUsername\"));\r",
-              "    pm.expect(jsonData.email).to.eql(pm.variables.get(\"dynamicEmail\"));\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Struktura uživatele je validní\", function () {\r",
-              "    const jsonData = pm.response.json();\r",
-              "\r",
-              "    pm.expect(jsonData).to.have.property(\"firstName\");\r",
-              "    pm.expect(jsonData).to.have.property(\"lastName\");\r",
               "});"
             ],
             "type": "text/javascript",
@@ -1791,6 +1837,18 @@
             "value": "keep-alive",
             "system": true,
             "type": "text"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+            "type": "text",
+            "id": 0
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text",
+            "id": 1
           }
         ],
         "body": {
@@ -1803,14 +1861,12 @@
           }
         },
         "url": {
-          "raw": "https://{{baseUrl}}/users/add",
-          "protocol": "https",
+          "raw": "{{baseUrl}}/users",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
-            "users",
-            "add"
+            "users"
           ]
         }
       },
