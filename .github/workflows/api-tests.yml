@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: '18'
 
-      # 3. Instalace Newmana a HTML reportéru
+      # 3. Instalace Newmana a HTML reporteru
       - name: Install Newman and HTML reporter
         run: |
           npm install -g newman
@@ -24,14 +24,14 @@ jobs:
       # 4. Spusteni testu a generovani reportu
       - name: Run API Tests
         run: |
-          newman run ecommerce-api-collection.json \
-          -e ecommerce-environment.json \
+          newman run ecommerce-api-collection.postman_collection.json \
+          -e ecommerce-environment.postman_environment.json \
           --reporters cli,htmlextra \
           --reporter-htmlextra-export report.html
 
-      # 5. Archivace HTML reportu jako artefaktu
+      # 5. Archivace HTML reportu jako artefaktu (opravena verze na v4)
       - name: Archive HTML Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: API-Test-Report
           path: report.html
