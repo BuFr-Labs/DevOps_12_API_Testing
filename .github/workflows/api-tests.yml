@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: '20'
 
-      # 3. Instalace Newmana a json-serveru
+      # 3. Instalace Newmana, HTML reporteru a json-serveru
       - name: Install dependencies
         run: |
           npm install -g newman
@@ -26,18 +26,30 @@ jobs:
       - name: Run API Tests
         run: |
           # Spust mock server na pozadi
-          json-server --watch db.json --port 3000 &
-          # Cekej 5 sekund, nez server nastartuje
-          sleep 5
-          # Spust testy proti localhostu
+          json-server --watch db.json --port 3000 > server.log 2>&1 &
+          
+          # Cekani, dokud server nezacne odpovidat na portu 3000
+          echo "Waiting for server to start..."
+          for i in {1..10}; do
+            if curl -s http://localhost:3000 > /dev/null; then
+              echo "Server is up!"
+              break
+            fi
+            sleep 2
+          done
+          
+          # Automaticka zamena URL v kolekci na localhost
+          sed -i 's|https://fakestoreapi.com|http://localhost:3000|g' ecommerce-api-collection.postman_collection.json
+          
+          # Spusteni testu proti localhostu
           newman run ecommerce-api-collection.postman_collection.json \
           -e ecommerce-environment.postman_environment.json \
-          --global-var "baseUrl=http://localhost:3000" \
           --reporters cli,htmlextra \
           --reporter-htmlextra-export report.html
 
       # 5. Archivace HTML reportu
       - name: Archive HTML Report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: API-Test-Report
