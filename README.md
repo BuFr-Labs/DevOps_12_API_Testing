@@ -36,3 +36,8 @@ Testy se spouští automaticky při každém push do repozitáře. Výsledky jso
 ## 📊 Výstupy
 * **CLI Logy**: Výpis průběhu testů v terminálu.
 * **HTML Report**: Podrobný report generovaný po každém běhu pipeline (dostupný jako artefakt v GitHub Actions).
+
+## Známé problémy a analýza
+* **Cloudflare 403 Forbidden:** Automatizované prostředí GitHub Actions je aktuálně blokováno ochranou API (Cloudflare). 
+* **Analýza:** IP adresy GitHub runnerů jsou cíleně omezovány, aby se zabránilo scraping botům. 
+* **Ověření:** Lokální spuštění přes Newman na lokální IP adrese je plně funkční, což potvrzuje korektnost implementace testů.

@@ -26,6 +26,7 @@ jobs:
         run: |
           newman run ecommerce-api-collection.postman_collection.json \
           -e ecommerce-environment.postman_environment.json \
+          --delay-request 500 \
           --reporters cli,htmlextra \
           --reporter-htmlextra-export report.html
 
