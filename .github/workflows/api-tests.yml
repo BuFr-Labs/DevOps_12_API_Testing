@@ -16,8 +16,9 @@ jobs:
       - name: Run Newman tests (Docker)
         run: |
           docker run --rm \
+            -e NODE_TLS_REJECT_UNAUTHORIZED=0 \
             -v $PWD:/etc/newman \
-            postman/newman:ubuntu \
+            postman/newman:alpine \
             run ecommerce-api-collection.postman_collection.json \
             -e ecommerce-environment.postman_environment.json \
             --reporters cli,htmlextra \
