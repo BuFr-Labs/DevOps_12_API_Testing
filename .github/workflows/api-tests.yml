@@ -24,9 +24,14 @@ jobs:
       # 4. Spusteni testu a generovani reportu
       - name: Run API Tests
         run: |
+          # Nainstaluj json-server
+          npm install -g json-server
+          # Spust jej na pozadi s tvymi daty (nebo prázdnými)
+          json-server --watch db.json --port 3000 &
+          # Spust testy proti localhostu
           newman run ecommerce-api-collection.postman_collection.json \
           -e ecommerce-environment.postman_environment.json \
-          --delay-request 500 \
+          --global-var "baseUrl=http://localhost:3000" \
           --reporters cli,htmlextra \
           --reporter-htmlextra-export report.html
 
