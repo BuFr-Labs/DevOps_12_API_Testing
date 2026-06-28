@@ -15,23 +15,19 @@ jobs:
         with:
           node-version: '20'
 
-      # 3. Instalace Newmana, HTML reporteru a json-serveru
+      # 3. Instalace zavisloi
       - name: Install dependencies
         run: |
           npm install -g newman newman-reporter-htmlextra json-server
 
-      # 4. Spusteni testu proti lokalnimu mock serveru
-      # Server cte data primo ze souboru, ktere mas v repozitari
+      # 4. Spusteni testu
       - name: Run API Tests
         run: |
-          # Spusteni json-serveru nad vsemi daty najednou
-          # Poznamka: json-server umi cist vice souboru, pokud je spojis v db.json
+          # Spusteni serveru na pozadi
           json-server --watch db.json --routes routes.json --port 3000 > server.log 2>&1 &
+          sleep 5
           
-          # Cekani na inicializaci serveru
-          sleep 10
-          
-          # Automaticka zamena URL v kolekci na localhost
+          # Nahrazeni URL v kolekci
           sed -i 's|https://fakestoreapi.com|http://localhost:3000|g' ecommerce-api-collection.postman_collection.json
           
           # Spusteni testu
@@ -40,8 +36,7 @@ jobs:
           --reporters cli,htmlextra \
           --reporter-htmlextra-export report.html
 
-      # 5. Archivace HTML reportu
-      # Ulozi vysledek testu pro kontrolu
+      # 5. Archivace
       - name: Archive HTML Report
         if: always()
         uses: actions/upload-artifact@v4
