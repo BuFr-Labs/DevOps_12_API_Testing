@@ -10,27 +10,12 @@ jobs:
       # stahni repozitar na runner
       - uses: actions/checkout@v3
 
-      # nastav Node.js
+      # nastav Node.js - pouzivame nativni https, zadne externi zavislosti
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      # httpyac umi spoustet Postman kolekce a nema TLS problemy jako Newman
-      - name: Install httpyac
-        run: npm install -g httpyac
-
-      # spust testy - httpyac nacte Postman kolekci a environment
+      # spust testy pres vlastni runner - obchazi TLS bug v postman-request
       - name: Run API tests
-        run: |
-          httpyac run ecommerce-api-collection.postman_collection.json \
-            --env ecommerce-environment.postman_environment.json \
-            --all \
-            --output short
-
-      # uloz report jako artefakt
-      - name: Upload report
-        uses: actions/upload-artifact@v4
-        with:
-          name: api-report
-          path: report.html
+        run: node run-collection.js ecommerce-api-collection.postman_collection.json ecommerce-environment.postman_environment.json
