@@ -9,7 +9,10 @@ jobs:
     steps:
       # checkout repozitare s kolekci a environmentem
       - uses: actions/checkout@v3
-
+      
+      - name: Test connectivity
+        run: curl -v https://dummyjson.com/products 2>&1 | head -50
+        
       # spusteni Newman testu v Docker kontejneru
       # pouziva official postman/newman image
       # tim se eliminuje problem s Node/OpenSSL/TLS na runneru
